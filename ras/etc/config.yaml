@@ -1,0 +1,9 @@
+root:
+   setting: 
+       resid: #id
+       isreg: N
+       srvip: 192.168.2.231
+       srvport: 6379
+       httpsrv: 192.168.2.231:8000
+       subch: ch_control
+       pubch: ch_transfer

@@ -1,0 +1,44 @@
+#!/bin/bash
+#chkconfig:345 10 20
+#description: For service named RAS,which is   
+alived=false
+start()
+{
+status
+[ $alived == "true" ] && exit 0
+python /etc/init.d/RASP.py &>/dev/null &
+status
+}
+status()
+{
+alived=false
+mainproc=`ps -eo command|grep 'RASP.py'|grep -v 'grep'`
+[ -n "$mainproc" ] && \
+   {
+      alived=true
+      ps -eo user,pid,command|grep 'RASP.py'|grep -v 'grep'|sort -nrk 2|awk 'BEGIN{print "main process is running:"}{print $1,$2,$3,$4}'
+   } || echo "RASP not found"
+}
+stop()
+{
+status
+[ $alived == "true" ] && \
+  {
+     read -p "confirm to kill all of the above process ? [y/n]" result
+     [ $result == "n" -o $result == "N" ] && exit 1
+     pgrep -f 'RASP.py'|xargs kill -9 && echo "stop completed"
+  }
+}
+
+case "$1" in
+start)
+  start;;
+stop)
+  stop;;
+status)
+  status;;
+*)
+  exit 1;;
+esac
+exit 0
+
