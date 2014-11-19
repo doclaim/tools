@@ -1,9 +1,6 @@
 #!/bin/bash
-action=$1
-name=$2
-[ -z $action ] && action=-h
-. /etc/rc.d/init.d/functions
 
+path=$PWD
 function install_py2_7_8()
 {
   [ -d /usr/local/python2.7 ] && echo 'python 2.7 has been installed' && exit 1
@@ -18,17 +15,25 @@ function install_py2_7_8()
   }
 }
 
+
 function install_pip()
 {
+  cd $path
+  [ -d setuptools-7.0 ] && rm -rf setuptools-7.0
+  [ -d pip-1.4 ] && rm -rf pip-1.4
+  tar -xzvf setuptools-7.0.tar.gz
+  tar -xzvf pip-1.4.tar.gz
   setuptool='setuptools-7.0'
-  rm -rf $setuptool/dist/*
-  daemon /usr/bin/python $setuptool/setup.py install && chmod +x $setuptool/dist/*
+  /usr/bin/python $setuptool/setup.py install && chmod +x $setuptool/dist/*
   /bin/bash $setuptool/dist/*
   cd pip-1.4
   /usr/bin/python setup.py install && {
+    [ -e /usr/bin/pip ] && rm -rf /usr/bin/pip
+    ln -s /usr/local/python2.7/bin/pip /usr/bin/pip
     which pip
     echo "$pyname pip install finished"
   }
 }
+
 install_py2_7_8
 install_pip
