@@ -11,6 +11,7 @@ function install_py2_7_8()
   [ -d /usr/local/python2.7 -a -e /usr/local/python2.7/bin/python2.7 ] && {
      rm -rf /usr/bin/python
      cp /usr/local/python2.7/bin/python2.7 /usr/bin/python
+     echo "export PATH=$PATH:/usr/local/python2.7/bin/" >>/etc/profile
      /usr/bin/python -V
   }
 }
