@@ -36,5 +36,5 @@ function install_pip()
   }
 }
 
-install_py2_7_8
+#install_py2_7_8
 install_pip
